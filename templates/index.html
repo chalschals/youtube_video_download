@@ -1,0 +1,82 @@
+{% extends 'base.html' %} {% block form_body %}
+<div class="form_main">
+  {% if error == 1 %}
+  <div class="error">
+    <p>{{error_msg}}</p>
+  </div>
+  {% endif %}
+  <form method="post" autocomplete="off">
+    {{form.as_p}} {% csrf_token %}
+    <input type="hidden" name="level" value="{{level}}" />
+
+    {% if level == 1 %}
+    <input type="submit" value="Start" />
+    {% elif level == 2%}
+    <input type="hidden" name="table_id" value="{{table_id}}" />
+    <div syle="padding:20px">
+      <iframe
+        width="100%"
+        allowfullscreen="allowfullscreen"
+        mozallowfullscreen="mozallowfullscreen"
+        msallowfullscreen="msallowfullscreen"
+        oallowfullscreen="oallowfullscreen"
+        webkitallowfullscreen="webkitallowfullscreen"
+        height="200px"
+        src="{{link}}"
+      >
+      </iframe>
+    </div>
+
+    <div class="secondaryrow">
+      <div class="each_radio">
+        <input
+          type="radio"
+          class="options"
+          value="audio"
+          id="audio"
+          name="video_or_audio"
+        />
+        <label for="audio">Audio only</label>
+      </div>
+      <div class="each_radio">
+        <input
+          type="radio"
+          class="options"
+          value="video"
+          id="video"
+          name="video_or_audio"
+          checked
+        />
+        <label for="video">Video</label>
+      </div>
+    </div>
+
+    <div class="secondaryrow" id="videoresolutions">
+      {% for res in resolutions %} {% if forloop.last %}
+      <div class="each_radio">
+        <input
+          type="radio"
+          value="{{res}}"
+          id="{{res}}"
+          name="resolution"
+          checked
+        />
+        <label for="{{res}}">{{res}}p</label>
+      </div>
+      {% else %}
+      <div class="each_radio">
+        <input type="radio" value="{{res}}" id="{{res}}" name="resolution" />
+        <label for="{{res}}">{{res}}p</label>
+      </div>
+      {% endif %} {% endfor %}
+    </div>
+    <input type="submit" value="Download" id="downloadbtn" />
+    {% endif %}
+  </form>
+  {% if finalLink %}
+  <a href="{{finalLink}}" download id="final_donload" style="display: none"
+    >download</a
+  >
+  {% endif %}
+</div>
+{% endblock %}
